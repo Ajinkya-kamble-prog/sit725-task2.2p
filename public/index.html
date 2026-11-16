@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIT725 Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+    input, select, button { padding: 8px; margin: 4px 0; width: 100%; box-sizing: border-box; }
+    #output { margin-top: 16px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>SIT725 Express Calculator</h1>
+  <p>Served from the <code>public</code> folder.</p>
+
+  <input type="number" id="numA" placeholder="First number" />
+  <input type="number" id="numB" placeholder="Second number" />
+  <select id="op">
+    <option value="add">Add</option>
+    <option value="subtract">Subtract</option>
+    <option value="multiply">Multiply</option>
+    <option value="divide">Divide</option>
+  </select>
+  <button id="calcBtn">Calculate</button>
+  <div id="output"></div>
+
+  <script>
+    document.getElementById("calcBtn").addEventListener("click", async () => {
+      const a = document.getElementById("numA").value;
+      const b = document.getElementById("numB").value;
+      const operation = document.getElementById("op").value;
+      const box = document.getElementById("output");
+
+      try {
+        const reply = await fetch(`/${operation}?a=${a}&b=${b}`);
+        const data = await reply.json();
+        box.textContent = reply.ok ? `Result: ${data.result}` : `Error: ${data.error}`;
+      } catch (err) {
+        box.textContent = "Could not reach the server.";
+      }
+    });
+  </script>
+</body>
+</html>
